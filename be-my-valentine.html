@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>For You ❤️</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@400;500&family=Baloo+2:wght@400;600&display=swap" rel="stylesheet">
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" href="love-favicon.png" />
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  height: 100vh;
+  background: linear-gradient(135deg, #fff6f8, #ffeef3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: "Inter", sans-serif;
+}
+
+#loading {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #fff6f8, #ffeef3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 10;
+  transition: opacity 1s ease;
+  text-align: center;
+}
+
+#loading h1 {
+  font-family: "Baloo 2", cursive;
+  font-size: 2rem;
+  color: #c94b6a;
+  margin-bottom: 0.5rem;
+  animation: fadePulse 2.5s infinite;
+}
+
+#loading p {
+  font-family: "Baloo 2", cursive;
+  font-size: 1rem;
+  color: #8a4b5e;
+  opacity: 0.85;
+}
+
+@keyframes fadePulse {
+  0% { opacity: 0.4; }
+  50% { opacity: 1; }
+  100% { opacity: 0.4; }
+}
+
+.loading-particle {
+  position: fixed;
+  bottom: -20px;
+  font-size: 1rem;
+  opacity: 0.6;
+  animation: floatUp linear forwards;
+  pointer-events: none;
+}
+
+@keyframes floatUp {
+  to { transform: translateY(-110vh) rotate(20deg); opacity: 0; }
+}
+
+#content { 
+  opacity: 0; 
+  transition: opacity 1.5s ease; 
+  perspective: 1200px; 
+}
+
+.card {
+  width: 360px;
+  height: 220px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 1.2s ease;
+  cursor: pointer;
+}
+
+.card.open { transform: rotateY(-180deg); }
+
+.card-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 16px;
+  box-shadow: 0 25px 45px rgba(0,0,0,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.card-front {
+  background: linear-gradient(135deg, #ffdde5, #ffe9ef);
+  font-family: "Playfair Display", serif;
+  font-size: 1.4rem;
+  color: #c94b6a;
+  flex-direction: column;
+}
+
+.card-front small {
+  font-size: 0.85rem;
+  display: block;
+  margin-top: 0.5rem;
+  color: #c94b6a;
+  opacity: 0.8;
+}
+
+.card-inside {
+  background: #fff0f5;
+  transform: rotateY(180deg);
+  flex-direction: column;
+}
+
+.card-inside p {
+  font-size: 0.95rem;
+  color: #777;
+  margin-bottom: 0.8rem;
+}
+
+.card-inside h2 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 1.5rem;
+  font-family: "Playfair Display", serif;
+}
+
+.buttons { display: flex; gap: 1rem; }
+
+button {
+  padding: 0.6rem 1.4rem;
+  border-radius: 999px;
+  border: none;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.yes { background: #ff6b8a; color: white; }
+.of-course { background: #ffe3ea; color: #c94b6a; }
+
+.emoji {
+  position: fixed;
+  top: -10px;
+  font-size: 1.2rem;
+  animation: fall linear forwards;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+@keyframes fall { to { transform: translateY(110vh); opacity: 0; } }
+
+.confetti {
+  position: fixed;
+  top: -10px;
+  width: 8px;
+  height: 12px;
+  opacity: 0.9;
+  animation: confettiFall linear forwards;
+  pointer-events: none;
+}
+
+@keyframes confettiFall { to { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
+
+.final-message {
+  font-size: 1.5rem;
+  color: #c94b6a;
+  font-family: "Playfair Display", serif;
+  animation: fadeIn 1s ease forwards;
+}
+
+@keyframes fadeIn { 
+  from { opacity: 0; transform: translateY(10px); } 
+  to { opacity: 1; transform: translateY(0); } 
+}
+</style>
+<body>
+<div id="loading">
+  <h1>Made with love ❤️</h1>
+  <p>For Bracey, from Morris 💛</p>
+</div>
+
+<div id="content">
+  <div class="card" id="card" onclick="openCard()">
+    <div class="card-face card-front">
+      For Bracey
+      <small>Tap to reveal 💌</small>
+    </div>
+
+    <div class="card-face card-inside" id="inside">
+      <p>Bracey, I’ve been wanting to ask you something…</p>
+      <h2>Will you be my Valentine? 💖</h2>
+      <div class="buttons">
+        <button class="yes" onclick="sayYes(event)">Yes ❤️</button>
+        <button class="of-course" onclick="sayYes(event)">Of course 😊</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const emojis = ["❤️","💖","💘","🌸","✨","💫"];
+const loading = document.getElementById("loading");
+const content = document.getElementById("content");
+
+// Start loading particles immediately
+function startLoadingParticles() {
+  const symbols = ["B","💖","R","💖","A","💖","C","💖","E","💖","Y","✨","🌸"];
+  const colors = ["#ff6b8a","#ffd1dc","#c94b6a","#ffe3ea","#ffb6c1"];
+  return setInterval(() => {
+    const p = document.createElement("div");
+    p.className = "loading-particle";
+    p.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    p.style.color = colors[Math.floor(Math.random() * colors.length)];
+    p.style.left = Math.random() * 100 + "vw";
+    p.style.animationDuration = 4 + Math.random() * 4 + "s";
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 10000);
+  }, 200);
+}
+
+const loadingParticlesInterval = startLoadingParticles();
+
+setTimeout(() => {
+  loading.style.opacity = "0";
+  setTimeout(() => {
+    loading.style.display = "none";
+    content.style.opacity = "1";
+  }, 1000);
+}, 3500);
+
+function startEmojisForever() {
+  setInterval(() => {
+    const emoji = document.createElement("div");
+    emoji.className = "emoji";
+    emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    emoji.style.left = Math.random() * 100 + "vw";
+    emoji.style.animationDuration = 4 + Math.random() * 3 + "s";
+    document.body.appendChild(emoji);
+    setTimeout(() => emoji.remove(), 8000);
+  }, 400);
+}
+startEmojisForever();
+
+function openCard() {
+  const card = document.getElementById("card");
+  if (!card.classList.contains("open")) {
+    card.classList.add("open");
+  }
+}
+
+function launchConfetti() {
+  const colors = ["#ff6b8a","#ffd1dc","#c94b6a","#ffe3ea"];
+  for (let i = 0; i < 80; i++) {
+    const c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = Math.random() * 100 + "vw";
+    c.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    c.style.animationDuration = 3 + Math.random() * 2 + "s";
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 6000);
+  }
+}
+
+function sayYes(e) {
+  e.stopPropagation();
+  launchConfetti();
+
+  const inside = document.getElementById("inside");
+  inside.innerHTML = `
+    <p class="final-message">
+      You just made me very happy 💛<br>
+      I mean… you already make me happy every day,  
+      but today I get to brag about it 😎
+    </p>
+  `;
+}
+</script>
+</body>
+</html>
